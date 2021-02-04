@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Default page</title>
+	<meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+	<div class="container">
+	<h1>Dashboard</h1>
+	<p>Hospital wise collected data distribution</p>
+	<table class="table table-striped">
+	<tr>
+	<th>Hospital Name</th>
+	<th>Department</th>
+	<th>Sample status</th>
+	<th>Total</th>
+	<tr/>
+	<% rows.forEach(row=>{ %>
+		<tr>
+		<td><%= hos[row.main_hos_code]%></td>
+		<td><% if(row.main_dept==1) {%>Gaynae-Obs <% }else {%>Skin VD<%}%></td>
+		<td><% if(row.main_sample==1) {%>Collected <% }else {%>Not Collected<%}%></td>
+		<td><%= row.total %></td>
+		<tr/>
+	<% }) %>
+	</table>
+	</div>
+</body>
+</html>

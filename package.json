@@ -1,0 +1,20 @@
+{
+  "name": "sti",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "nodemon app"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-pdf": "^1.2.2",
+    "mysql": "^2.18.1",
+    "pdf-creator-node": "^1.4.2",
+    "promise": "^8.1.0"
+  }
+}
