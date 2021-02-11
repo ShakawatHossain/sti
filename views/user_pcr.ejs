@@ -51,7 +51,7 @@
           <li class="active">
             <a href="">
               <i class="now-ui-icons education_atom"></i>
-              <p>Microbiology report</p>
+              <p>LAB PCR report</p>
             </a>
           </li>
         </ul>
@@ -129,123 +129,168 @@
           <div class="col-md-8">
             <div class="card">
               <div class="card-header">
-                <h5 class="title">Culture result entry</h5>
+                <h5 class="title">PCR result entry</h5>
               </div>
               <div class="card-body">
-                <form action="culture_sample?no=<%=id%>" method="post">
+                <form action="pcr_sample?no=<%=id%>" method="post">
                   <div class="row">
                     <div class="col-md-6 pr-1">
                       <div class="form-group">
-                        <label>Gram negative dipplococci</label>
-                        <select name="gram_stain" id="gram_stain" class="form-control">
-                          <option value="1">Found</option>
-                          <option value="2">Not found</option>
+                        <label>Type of STI</label>
+                        <select name="sti_type" id="sti_type" class="form-control">
+                          <option value="1">STI 1</option>
+                          <option value="2">STI 2</option>
+                          <option value="3">STI 3</option>
+                          <option value="4">STI 4</option>
+                          <option value="5">STI 5</option>
+                          <option value="6">STI 6</option>
                         </select>
                       </div>
                     </div>
                     <div class="col-md-6 px-1">
                       <div class="form-group">
-                        <label>Pus cell/HPF</label>
-                        <select name="hpf" id="hpf" class="form-control">
-                          <option value="1">Plenty</option>
-                          <option value="2">Moderate</option>
-                          <option value="3">few</option>
-                        </select>
+                        <label>STI pathogens</label>
+                        <!--  -->
+                        <table class="table">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" id="ngo" name="ngo" value="ngo">
+                                    <span class="form-check-sign"></span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="text-left">N. gonorrhoea</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" id="ctr" name="ctr" value="ctr">
+                                    <span class="form-check-sign"></span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="text-left">C. trachomatis</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" id="tpa" name="tpa" value="tpa">
+                                    <span class="form-check-sign"></span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="text-left">T. pallindum</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" id="mge" name="mge" value="mge">
+                                    <span class="form-check-sign"></span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="text-left">M. genitalium</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" id="mho" name="mho" value="mho">
+                                    <span class="form-check-sign"></span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="text-left">M. hominis</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" id="uur" name="uur" value="uur">
+                                    <span class="form-check-sign"></span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="text-left">U. urealyticum</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" id="upa" name="upa" value="upa">
+                                    <span class="form-check-sign"></span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="text-left">U. parvum</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" id="gva" name="gva" value="gva">
+                                    <span class="form-check-sign"></span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="text-left">G. vaginalis</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" id="tva" name="tva" value="tva">
+                                    <span class="form-check-sign"></span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="text-left">T. vaginalis</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" id="hsv1" name="hsv1" value="hsv1">
+                                    <span class="form-check-sign"></span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="text-left">HSV-1</td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <div class="form-check">
+                                  <label class="form-check-label">
+                                    <input class="form-check-input" type="checkbox" id="hsv2" name="hsv2" value="hsv2">
+                                    <span class="form-check-sign"></span>
+                                  </label>
+                                </div>
+                              </td>
+                              <td class="text-left">HSV-2</td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </div>
                   <div class="row">
                     <div class="col-md-12">
                       <div class="form-group">
-                        <label>Culture</label>
-                        <p class="text-muted">Has yielded ________ of Gram negatve diplococcic at 37°C for 48 hours
-                        5% CO<sub>2</sub></p>
-                        <select name="is_growth" id="is_growth" class="form-control">
-                          <option value="1">Growth</option>
-                          <option value="2">No Growth</option>
+                        <label>Result</label>
+                        <select name="result" id="result" class="form-control">
+                          <option value="1">Positive</option>
+                          <option value="2">Negative</option>
                         </select>
                       </div>
                     </div>
                   </div>
-                  <div class="row">
-                    <div class="col-md-12">
-                      <div class="form-group">
-                        <label>VITEK-2 System</label>
-                        <p class="text-muted">Neisseria gonorrhoeae</p>
-                        <select name="is_vitek" id="is_vitek" class="form-control">
-                          <option value="1">Growth</option>
-                          <option value="2">No Growth</option>
-                        </select>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row"><div class="col-md-12">
-                    <p class="text-muted">Sensitivity test</p>
-                    <div class="table-responsive">
-                      <table class="table">
-                        <tr>
-                          <td>Penicillin</td>
-                          <td>
-                            <select name="penicillin" id="penicillin" class="form-control">
-                            <option value="1">Sensitive</option>
-                            <option value="2">Intermediate</option>
-                            <option value="3">Resistance</option>
-                            </select>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Cefixime</td>
-                          <td>
-                            <select name="cefixime" id="cefixime" class="form-control">
-                            <option value="1">Sensitive</option>
-                            <option value="2">Intermediate</option>
-                            <option value="3">Resistance</option>
-                            </select>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Ceftriaxone</td>
-                          <td>
-                            <select name="ceftriaxone" id="ceftriaxone" class="form-control">
-                            <option value="1">Sensitive</option>
-                            <option value="2">Intermediate</option>
-                            <option value="3">Resistance</option>
-                            </select>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Azithromycin</td>
-                          <td>
-                            <select name="azythromycin" id="azythromycin" class="form-control">
-                            <option value="1">Sensitive</option>
-                            <option value="2">Intermediate</option>
-                            <option value="3">Resistance</option>
-                            </select>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Ciprofloxacin</td>
-                          <td>
-                            <select name="ciprofloxacin" id="ciprofloxacin" class="form-control">
-                            <option value="1">Sensitive</option>
-                            <option value="2">Intermediate</option>
-                            <option value="3">Resistance</option>
-                            </select>
-                          </td>
-                        </tr>
-                        <tr>
-                          <td>Teracycline</td>
-                          <td>
-                            <select name="teracycline" id="teracycline" class="form-control">
-                            <option value="1">Sensitive</option>
-                            <option value="2">Intermediate</option>
-                            <option value="3">Resistance</option>
-                            </select>
-                          </td>
-                        </tr>
-                      </table>
-                    </div>
-                  </div></div>
+                  
                   <div class="row">
                     <input type="submit" class="btn btn-success" value="submit"/>
                   </div>
@@ -277,7 +322,7 @@
                   <%= row[0].visit_pd_guds==1?"Genital ulcer disease syndrome":" " %>
                   <%= row[0].visit_pd_lap==1?"Lower abdominal pain":" " %>
                   <%= row[0].visit_pd_ano==1?"Anorectal/Pharyngeal discharge syndrome":" " %>
-                  <%= row[0].visit_pd_oro==1?"Oropharyngeal/Anorectal ulcer disease":" " %>
+                  <%= row[0].visit_pd_oro==1?"Oropharyngeal/Anorectal ulcer disease syndrome":" " %>
                   <%= row[0].visit_pd_sss==1?"Scrotal swelling syndrome":" " %>
                   <%= row[0].visit_pd_ibs==1?"Inguinal bubo syndrome":" " %>
                 </p>

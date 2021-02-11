@@ -17,23 +17,26 @@ var from_date=todate;
 var till_date=todate;
 
 var con = mysql.createConnection({
-  // host: "119.148.17.100",
-  // port: "3306",
-  // user: "shaku",
-  // password: "I3dcr089",
-  // database: "sti"
-  host: "localhost",
+  host: "119.148.17.100",
   port: "3306",
-  user: "root",
-  password: "",
+  user: "shaku",
+  password: "I3dcr089",
   database: "sti"
+  // host: "localhost",
+  // port: "3306",
+  // user: "root",
+  // password: "",
+  // database: "sti"
 });
 // app.get('/assets',function(req,res,next){
 // 	next();
 // });
 app.use('/assets', express.static('assets'))
 app.get('/',function(req,res){
-	res.sendFile(__dirname+"/views/login.html");
+	res.render("login");
+});
+app.post('/',urlencodedParser,function(req,res){
+	checkLogin(req.body.user_id,req.body.pass,res);
 });
 app.get('/view/login_design.css',function(req,res){
 	res.sendFile(__dirname+"/views/login_design.css");
@@ -55,24 +58,41 @@ app.get('/samplelist',function(req,res){
 	}
 	transaction.getData(con,from,to,res);
 });
-app.post('/culture_sample',urlencodedParser,function(req,res){
-	require('./culture_res').setData(con,req.query.no,req.body,res,promise);
-});
 app.get('/culture_sample',function(req,res){
 	require('./culture_res').getData(con,req.query.no,res);
 });
+app.post('/culture_sample',urlencodedParser,function(req,res){
+	require('./culture_res').setData(con,req.query.no,req.body,res,promise);
+});
 app.get('/culture_down',function(req,res){
 	require('./culture_report_pdf').printData(req.query.no,res,con,app);
+});
+app.get('/pcr_sample',function(req,res){
+	require('./pcr_res').getData(con,req.query.no,res);
+});
+app.post('/pcr_sample',urlencodedParser,function(req,res){
+	require('./pcr_res').setData(con,req.query.no,req.body,res,promise);
+});
+app.get('/pcr_down',function(req,res){
+	require('./pcr_report_pdf').printData(req.query.no,res,con,app);
 });
 app.get('/dashboard/:from/:to',function(req,res){
 	seeDash(req.params.from,req.params.to,res);
 });
 app.get('/dashboard',function(req,res){
-	let date_ob = new Date();
-	let date = ("0" + date_ob.getDate()).slice(-2);
-	let month = ("0" + (date_ob.getMonth() + 1)).slice(-2);
-	let year = date_ob.getFullYear();
-	seeDash("year-month-date","year-month-date",res);
+	var to = req.query.to;
+	if(typeof to === 'undefined'){
+		to = till_date;
+	}else{
+		till_date=to;
+	}
+	var from=req.query.from;
+	if(typeof from === 'undefined'){
+		from = from_date;
+	}else{
+		from_date=from;
+	}
+	seeDash(from,to,res);
 });
 app.get('/sti_type/:from/:to',function(req,res){
 	stiClass(req.params.from,req.params.to,res);
@@ -93,7 +113,7 @@ var seeDash=function(from,to,res){
 	con.query(sql, function (err, result, fields) {
 	    if (err) throw err;
 	   	var hos = ['','DMCH','MMCH','CMCH','RMCH','SBMCH','SOMCH','ThDH','BaDH']
-	    res.render('dashboard',{rows: result, fields: fields,hos:hos});
+	    res.render('dashboard',{rows:result, fields:fields, hos:hos, from:from, to:to});
   	});
 }
 var stiClass=function(from,to,res){
@@ -174,6 +194,21 @@ var parseResult=function(result){
 		});
 	var sti_res = {sti1:sti1,sti2:sti2,sti3:sti3,sti4:sti4,sti5:sti5,sti6:sti6};
 	return sti_res;
+}
+var checkLogin=function(un,pass,res){
+	var sql = "select * from table_users where user_id='"+un.trim()+"' and password='"+
+	pass.trim()+"'";
+	con.query(sql,function(err, result, fields){
+		if(err){
+			res.end("Query Error!!");
+		}
+		if(result.length>0){
+			console.log(result[0].name);
+			res.end("Result get success");
+		}else{
+			res.render("login",{result:'Login Error!'});
+		}
+	});
 }
 
 app.listen(3000);

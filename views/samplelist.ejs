@@ -27,16 +27,28 @@
         Tip 1: You can change the color of the sidebar using: data-color="blue | green | orange | red | yellow"
     -->
       <div class="logo">
-        <a href="http://www.creative-tim.com" class="simple-text logo-mini">
-          CT
+        <a href="" class="simple-text logo-mini">
+          STI
         </a>
-        <a href="http://www.creative-tim.com" class="simple-text logo-normal">
-          Creative Tim
+        <a href="" class="simple-text logo-normal">
+          Surveillance Protal
         </a>
       </div>
       <div class="sidebar-wrapper" id="sidebar-wrapper">
         <ul class="nav">
           <li>
+            <a href="./dashboard">
+              <i class="now-ui-icons design_app"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li class="active">
+            <a href="./samplelist">
+              <i class="now-ui-icons education_atom"></i>
+              <p>Collected Sample List</p>
+            </a>
+          </li>
+          <!-- <li>
             <a href="./dashboard.html">
               <i class="now-ui-icons design_app"></i>
               <p>Dashboard</p>
@@ -83,7 +95,7 @@
               <i class="now-ui-icons arrows-1_cloud-download-93"></i>
               <p>Upgrade to PRO</p>
             </a>
-          </li>
+          </li> -->
         </ul>
       </div>
     </div>
@@ -193,7 +205,11 @@
                         <%= row.visit_sm_ul==1?"Ulcer swab":" " %>
                         </td>
                         <td>
+                          <% if(row.is_pcr==0){%>
                           <a href="pcr_sample?no=<%=row.KEY_ID%>">PCR report entry</a>
+                          <% }else {%>
+                          <a href="pcr_down?no=<%=row.KEY_ID%>">Download PCR report</a>
+                          <% }%>
                           <% if(row.is_culture==0){%>
                           <a href="culture_sample?no=<%=row.KEY_ID%>">Culture report entry</a>
                           <% }else {%>
