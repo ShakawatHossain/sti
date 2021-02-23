@@ -171,6 +171,14 @@
                 <h4 class="card-title"> Sample List</h4>
               </div>
               <div class="card-body">
+                <div class="input-group no-border">
+                  <input id="myInput" type="text" placeholder="Search.." class="form-control">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <i class="now-ui-icons ui-1_zoom-bold"></i>
+                    </div>
+                  </div>
+                </div>                      
                 <div class="table-responsive">
                   <table class="table">
                     <thead class=" text-primary">
@@ -190,7 +198,7 @@
                         Action
                       </th>
                     </thead>
-                    <tbody>
+                    <tbody id="data_table">
                       <% rows.forEach(row=>{%>
                       <tr>
                         <td><%=row.main_case_id%></td>
@@ -270,6 +278,17 @@
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="/assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
   <script src="/assets/demo/demo.js"></script>
+  <script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        console.log($(this).val().toLowerCase());
+        var value = $(this).val().toLowerCase();
+        $("#data_table tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+</script>
 </body>
 
 </html>

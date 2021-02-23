@@ -1,11 +1,12 @@
-module.exports.printData = function (id,res,con,app){
+module.exports.printData = function (id,res,con,app,version){
+    
     var query_string="SELECT * FROM table_gp INNER JOIN pcr_result ON "+
     "table_gp.KEY_ID=pcr_result.table_gp_id WHERE table_gp.KEY_ID="+id;
-    // console.log(query_string);
+    
     con.query(query_string, function (err, result, fields) {
         if (err) throw err;
         var dr = new Date(result[0].mob_created_at);
-        var drpt = new Date(result[0].rpt_created_at);
+        var drpt = new Date(result[0].pcr_created_at);
         var hos_name= ['','DMCH','MMCH','CMCH','RMCH','SBMCH','SOMCH','ThDH','BaDH'];
         var dept_name= ['','Gaynae-Obs','Skin VD'];
         var pt_sex= ['','Male','Female','Transgender'];
@@ -115,7 +116,7 @@ module.exports.printData = function (id,res,con,app){
         var roughhtmlcontent="<html><body>"+
         	"<table width='100%'>"+
 	  			"<tr>"+
-	    		"<td><img src='file:\\\D:\\rom\\sti\\assets\\img\\bdgov.png' alt='bdlogo' height='80' width='80'/><td>"+
+	    		"<td><img src='file:///home/project/sti/assets/img/bdgov.png' alt='bdlogo' height='80' width='80'/><td>"+
 	    		"<td><center>"+
 	      		"<p>Government of the People\'s Republic of Bangladesh"+
 	      		"<br/>"+
@@ -124,13 +125,13 @@ module.exports.printData = function (id,res,con,app){
 	      		"Mohakhali, Dhaka-1212, Bangladesh</p>"+
 	    		"</center></td>"+
 	    		"<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>"+
-	    		"<td><img src='file:\\\D:\\rom\\sti\\assets\\img\\iedcr.jpg' alt='abcde' height='60' width='60'/></td>"+
+	    		"<td><img src='file:///home/project/sti/assets/img/iedcr.jpg' alt='abcde' height='60' width='60'/></td>"+
 	  			"</tr>"+
 			"</table>"+
 			"<hr/>"+
 			"<center><h1>Laboratory test Report</h1></center>"+
 			"<br/>"+
-			"<center><table width='60%'>"+
+			"<center><table width='90%'>"+
 	  			"<tr>"+
 	  			"<td>ID no</td><td>"+result[0].main_case_id+"</td>"+
 	  			"<td>Site &amp; Dept </td><td> "+hos_name[result[0].main_hos_code]+"&amp;"+dept_name[result[0].main_dept]
@@ -143,9 +144,9 @@ module.exports.printData = function (id,res,con,app){
 	  			"<td>Specimen </td><td> "+spec+"</td>"+
 	  			"<tr/><tr>"+
 	  			"</tr><tr>"+
-	  			"<td>Date of collection</td><td>"+dr.getFullYear() + "-" + dr.getMonth()+1 + "-" +
+	  			"<td>Sample collection Date</td><td>"+dr.getFullYear() + "-" + (dr.getMonth()+1) + "-" +
 	  			 dr.getDate()+"</td>"+
-	  			"<td>Date of report</td><td>"+drpt.getFullYear() + "-" + drpt.getMonth()+1 + "-" +
+	  			"<td>Date of report</td><td>"+drpt.getFullYear() + "-" + (drpt.getMonth()+1) + "-" +
 	  			 drpt.getDate()+"</td>"+
 	  			"</tr>"+
 	  		"</table></center>"+
@@ -168,8 +169,11 @@ module.exports.printData = function (id,res,con,app){
 				"<br/>"+
 				"<table width='100%'>"+
 				"<tr>"+
-				"<td>"+
-				"<hr/>"+
+				"<td>";
+                if(version>0){
+                    roughhtmlcontent+="<img src='file:\\\home\\project\\sti\\assets\\img\\bdgov.png' alt='bdlogo' height='80' width='80'/>";
+                }
+				roughhtmlcontent+="<hr/>"+
 				"<center>Consultant <br/> STI surveillance program</center>"+
 				"<td>"+
 				"<td>"+

@@ -1,4 +1,7 @@
 var express = require('express');
+const session = require('express-session');
+const redis = require ('redis');
+const connectRedis = require('connect-redis');
 var app = express();
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
@@ -7,6 +10,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false });
 app.set('view engine','ejs');
 var pdf = pdf = require('express-pdf');
 app.use(pdf);
+const RedisStore = connectRedis(session);
 // Date cache
 let date_ob = new Date();
 let date = ("0" + date_ob.getDate()).slice(-2);
@@ -16,33 +20,51 @@ var todate=year+"-"+month+"-"+date;
 var from_date=todate;
 var till_date=todate;
 
+const redisClient = redis.createClient({
+	port: 6379,
+	host: 'localhost'
+});
+app.use(session({
+	store: new RedisStore({client: redisClient}),
+	secret: 'abc911',
+	saveUninitialized: false,
+	resave: false,
+	cookie:{
+		secure: false, //if true, only transmit for https
+		httpOnly: true,
+		maxAge: 1000*60*30
+	}
+}));
+
 var con = mysql.createConnection({
   host: "119.148.17.100",
   port: "3306",
   user: "shaku",
   password: "I3dcr089",
   database: "sti"
-  // host: "localhost",
-  // port: "3306",
-  // user: "root",
-  // password: "",
-  // database: "sti"
+  
 });
-// app.get('/assets',function(req,res,next){
-// 	next();
-// });
 app.use('/assets', express.static('assets'))
 app.get('/',function(req,res){
-	res.render("login");
+	if(!checksession(req)){
+		res.render("login");
+	}else{
+		res.render("dashboard");
+	}
+	
 });
 app.post('/',urlencodedParser,function(req,res){
-	checkLogin(req.body.user_id,req.body.pass,res);
+	checkLogin(req.body.user_id,req.body.pass,req,res);
 });
-app.get('/view/login_design.css',function(req,res){
-	res.sendFile(__dirname+"/views/login_design.css");
+app.get('/logout',function(req,res){
+	req.session.destroy();
+	res.redirect('./');
 });
 
 app.get('/samplelist',function(req,res){
+	if(!checksession(req)){
+		res.redirect('./');
+	}
 	var transaction = require('./transaction');
 	var to = req.query.to;
 	if(typeof to === 'undefined'){
@@ -65,7 +87,15 @@ app.post('/culture_sample',urlencodedParser,function(req,res){
 	require('./culture_res').setData(con,req.query.no,req.body,res,promise);
 });
 app.get('/culture_down',function(req,res){
+	// res.end("Hello");
 	require('./culture_report_pdf').printData(req.query.no,res,con,app);
+});
+app.get('/cultue_sign_panel',function(req,res){
+	if(checksession(req) && req.session.role==3){
+		require('./signature').getCultureList(req,res,con);
+	}else{
+		res.redirect('./dashboard');
+	}
 });
 app.get('/pcr_sample',function(req,res){
 	require('./pcr_res').getData(con,req.query.no,res);
@@ -74,12 +104,17 @@ app.post('/pcr_sample',urlencodedParser,function(req,res){
 	require('./pcr_res').setData(con,req.query.no,req.body,res,promise);
 });
 app.get('/pcr_down',function(req,res){
-	require('./pcr_report_pdf').printData(req.query.no,res,con,app);
+	// console.log("get request!");
+	require('./pcr_report_pdf').printData(req.query.no,res,con,app,0);
+	// res.end("Holla");
 });
-app.get('/dashboard/:from/:to',function(req,res){
-	seeDash(req.params.from,req.params.to,res);
+app.get('/pcr_down_signed',function(req,res){
+	require('./pcr_report_pdf').printData(req.query.no,res,con,app,2);
 });
 app.get('/dashboard',function(req,res){
+	if(!checksession(req)){
+		res.redirect('./');
+	}
 	var to = req.query.to;
 	if(typeof to === 'undefined'){
 		to = till_date;
@@ -92,7 +127,7 @@ app.get('/dashboard',function(req,res){
 	}else{
 		from_date=from;
 	}
-	seeDash(from,to,res);
+	seeDash(from,to,res,req);
 });
 app.get('/sti_type/:from/:to',function(req,res){
 	stiClass(req.params.from,req.params.to,res);
@@ -102,7 +137,7 @@ app.get('/stis/:from/:to',function(req,res){
 	// res.end("Hello from stis!");
 });
 
-var seeDash=function(from,to,res){
+var seeDash=function(from,to,res,req){
 	var sql = "select main_hos_code,main_dept,main_sample,count(distinct(main_case_id)) as 'total'" +
 	 " from sti.table_gp where date(main_in_date)>='"+from+
 	 "' and date(main_in_date)<='"+to+
@@ -113,7 +148,8 @@ var seeDash=function(from,to,res){
 	con.query(sql, function (err, result, fields) {
 	    if (err) throw err;
 	   	var hos = ['','DMCH','MMCH','CMCH','RMCH','SBMCH','SOMCH','ThDH','BaDH']
-	    res.render('dashboard',{rows:result, fields:fields, hos:hos, from:from, to:to});
+	    res.render('dashboard',{rows:result, fields:fields, hos:hos, from:from, to:to, 
+	    	role: req.session.role});
   	});
 }
 var stiClass=function(from,to,res){
@@ -195,7 +231,7 @@ var parseResult=function(result){
 	var sti_res = {sti1:sti1,sti2:sti2,sti3:sti3,sti4:sti4,sti5:sti5,sti6:sti6};
 	return sti_res;
 }
-var checkLogin=function(un,pass,res){
+var checkLogin=function(un,pass,req,res){
 	var sql = "select * from table_users where user_id='"+un.trim()+"' and password='"+
 	pass.trim()+"'";
 	con.query(sql,function(err, result, fields){
@@ -203,12 +239,20 @@ var checkLogin=function(un,pass,res){
 			res.end("Query Error!!");
 		}
 		if(result.length>0){
-			console.log(result[0].name);
-			res.end("Result get success");
+			// console.log(result[0].name);
+			req.session.role = result[0].role;
+			res.redirect('/dashboard');
 		}else{
 			res.render("login",{result:'Login Error!'});
 		}
 	});
 }
+var checksession=function(req){
+	if(typeof req.session.role=='undefined' || req.session.role==''){
+		return false;
+	}else{
+		return true;
+	}
+}
 
-app.listen(3000);
+app.listen(3010);

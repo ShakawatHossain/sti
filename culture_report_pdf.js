@@ -11,6 +11,7 @@ module.exports.printData = function (id,res,con,app){
         var gram_arr= ['','Found','Not found'];
         var hpf_arr= ['','Plenty','Moderate','Few'];
         var grow_arr= ['','Growth','No growth'];
+        var vitek_arr= ['','Detected','Not detected'];
         var sensitivity_arr= ['','Sensitive','Intermediate','Resistance'];
         var spec = "";
         if(result[0].visit_sm_us==1){
@@ -49,7 +50,7 @@ module.exports.printData = function (id,res,con,app){
         var roughhtmlcontent="<html><body>"+
         	"<table width='100%'>"+
 	  			"<tr>"+
-	    		"<td><img src='file:\\\D:\\rom\\sti\\assets\\img\\bdgov.png' alt='bdlogo' height='80' width='80'/><td>"+
+	    		"<td><img src='file:///home/project/sti/assets/img/bdgov.png' alt='bdlogo' height='80' width='80'/><td>"+
 	    		"<td><center>"+
 	      		"<p>Government of the People\'s Republic of Bangladesh"+
 	      		"<br/>"+
@@ -58,20 +59,20 @@ module.exports.printData = function (id,res,con,app){
 	      		"Mohakhali, Dhaka-1212, Bangladesh</p>"+
 	    		"</center></td>"+
 	    		"<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>"+
-	    		"<td><img src='file:\\\D:\\rom\\sti\\assets\\img\\iedcr.jpg' alt='abcde' height='60' width='60'/></td>"+
+	    		"<td><img src='file:///home/project/sti/assets/img/iedcr.jpg' alt='abcde' height='60' width='60'/></td>"+
 	  			"</tr>"+
 			"</table>"+
 			"<hr/>"+
 			"<center><h1>Microbiological Report</h1></center>"+
 			"<br/>"+
-			"<center><table width='60%'>"+
+			"<center><table width='90%'>"+
 	  			"<tr>"+
 	  			"<td>ID no</td><td>"+result[0].main_case_id+"</td>"+
-	  			"<td>Date of recieved</td><td>"+dr.getFullYear() + "-" + dr.getMonth()+1 + "-" +
+	  			"<td>Sample collection Date</td><td>"+dr.getFullYear() + "-" + (dr.getMonth()+1) + "-" +
 	  			 dr.getDate()+"</td>"+
 	  			"</tr><tr>"+
 	  			"<td>Patient\'s name </td><td> "+result[0].demo_name+"</td>"+
-	  			"<td>Date of report</td><td>"+drpt.getFullYear() + "-" + drpt.getMonth()+1 + "-" +
+	  			"<td>Date of report</td><td>"+drpt.getFullYear() + "-" + (drpt.getMonth()+1) + "-" +
 	  			 drpt.getDate()+"</td>"+
 	  			"</tr><tr>"+
 	  			"<td>Refered by </td><td> "+hos_name[result[0].main_hos_code]+"</td>"+
@@ -90,8 +91,8 @@ module.exports.printData = function (id,res,con,app){
 	  		" for 48 hours with 5% CO<sub>2</sub></p><br/>";
 	  		if(result[0].is_growth==1){
 	  			roughhtmlcontent+="<h2>3. VITEK-2 System</h2>"+
-		  		"<p>Neisseria gonorrhoeae "+gram_arr[result[0].is_vitek]+" </p><br/>";
-		  		if(result[0].is_vitek==1){
+		  		"<p>Neisseria gonorrhoeae "+vitek_arr[result[0].is_vitek]+" </p><br/>";
+		  		if(result[0].is_vitek==1 && result[0].is_sensitivity==1){
 			  		roughhtmlcontent+="<h2>4. Sensitivity test</h2>"+
 			  		"<table width='50%''>"+
 			  		"<tr><td>Penicillin</td>&nbsp;&nbsp;&nbsp;&nbsp;<td></td><td>"+sensitivity_arr[result[0].penicillin]+"</td></tr>"+
@@ -101,16 +102,19 @@ module.exports.printData = function (id,res,con,app){
 					"<tr><td>Ciprofloxacin</td>&nbsp;&nbsp;&nbsp;&nbsp;<td></td><td>"+sensitivity_arr[result[0].ciprofloxacin]+"</td></tr>"+
 					"<tr><td>Tetracycline</td>&nbsp;&nbsp;&nbsp;&nbsp;<td></td><td>"+sensitivity_arr[result[0].tetracycline]+"</td></tr>"+
 					"</table>";
+				}else{
+					roughhtmlcontent+=
+				"<br/>"+
+				"<br/>"+
+				"<br/>"+
+				"<br/>"+
+				"<br/>"+
+				"<br/>"+
+				"<br/>";
 				}
 	  		}
-	  		roughhtmlcontent+="<br/>"+
-				"<br/>"+
-				"<br/>"+
-				"<br/>"+
-				"<br/>"+
-				"<br/>"+
-				"<br/>"+
-				"<br/>"+
+	  		roughhtmlcontent+=
+	  			"<br/>"+
 				"<table width='100%'>"+
 				"<tr>"+
 				"<td>"+
@@ -132,24 +136,29 @@ module.exports.printData = function (id,res,con,app){
 				"</table>";
 	  		
 		roughhtmlcontent+="</body></html>";
-        res.pdfFromHTML({
-	        filename: 'generated.pdf',
-	        htmlContent: roughhtmlcontent,
-	        options: {
-	        	format: "A3",
-		        orientation: "portrait",
-		        border: "10mm",
-		        header: {
-	            height: "3mm",
-	            contents: ""
-	        	},
-	        	 "footer": {
-		            "height": "28mm",
-		            "contents": {
-		        	}
-		    	}
-        	}
-    	});
-    	// res.end(roughhtmlcontent);
+        try{
+        	res.pdfFromHTML({
+		        filename: 'generated.pdf',
+		        htmlContent: roughhtmlcontent,
+		        options: {
+		        	format: "A3",
+			        orientation: "portrait",
+			        border: "10mm",
+			        header: {
+		            height: "3mm",
+		            contents: ""
+		        	},
+		        	 "footer": {
+			            "height": "0mm",
+			            "contents": {
+			        	}
+			    	}
+	        	}
+	    	});
+    	}catch(err){
+    		console.log(err);
+    		res.end(roughhtmlcontent);
+    	}
+    	
     });
 }

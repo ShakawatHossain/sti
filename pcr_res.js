@@ -42,7 +42,7 @@ module.exports.setData = function (con,id,data,res,promise){
     "hsv1='"+hsv1+"',"+
     "hsv2='"+hsv2+"',"+
     "result='"+data.result+"'";
-    console.log(query_string);
+    // console.log(query_string);
     var update_query_string= "UPDATE table_gp SET is_pcr= 1 WHERE KEY_ID = "+id;
 
     var promise = new Promise((resolve,reject)=>
