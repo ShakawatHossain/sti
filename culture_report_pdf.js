@@ -9,43 +9,20 @@ module.exports.printData = function (id,res,con,app){
         var hos_name= ['','DMCH','MMCH','CMCH','RMCH','SBMCH','SOMCH','ThDH','BaDH'];
         var pt_sex= ['','Male','Female','Transgender'];
         var gram_arr= ['','Found','Not found'];
-        var hpf_arr= ['','Plenty','Moderate','Few'];
+        var hpf_arr= ['','Plenty','Moderate','Few','No pus cell'];
         var grow_arr= ['','Growth','No growth'];
+        var grow_arr_hour= ['','24 hrs','48 hrs'];
         var vitek_arr= ['','Detected','Not detected'];
         var sensitivity_arr= ['','Sensitive','Intermediate','Resistance'];
         var spec = "";
         if(result[0].visit_sm_us==1){
         	spec+="Urethal swab";
         }
-        if(result[0].visit_sm_vs==1){
-        	if(spec==="")
-        		spec+="Vaginal swab";
-        	else
-        		spec+=", Vaginal swab";
-        }
-        if(result[0].visit_sm_ur==1){
-        	if(spec==="")
-        		spec+="Urine";
-        	else
-        		spec+=", Urine";
-        }
         if(result[0].visit_sm_es==1){
         	if(spec==="")
         		spec+="Endocervical swab";
         	else
         		spec+=", Endocervical swab";
-        }
-        if(result[0].visit_sm_bd==1){
-        	if(spec==="")
-        		spec+="Blood";
-        	else
-        		spec+=", Blood";
-        }
-        if(result[0].visit_sm_ul==1){
-        	if(spec==="")
-        		spec+="Ulcer swab";
-        	else
-        		spec+=", Ulcer swab";
         }
         var roughhtmlcontent="<html><body>"+
         	"<table width='100%'>"+
@@ -84,14 +61,14 @@ module.exports.printData = function (id,res,con,app){
 	  			"</tr>"+
 	  		"</table></center>"+
 	  		"<h2>1. Gram staining</h2>"+
-	  		"<p>Gram negative diplococci: "+gram_arr[result[0].gram_stain]+"</p>"+
+	  		"<p>Gram negative intra cellular diplococci: "+gram_arr[result[0].gram_stain]+"</p>"+
 	  		"<p>Pus cell/HPF: "+hpf_arr[result[0].hpf]+"</p><br/>"+
 	  		"<h2>2. Culture</h2>"+
-	  		"<p>Has yielded "+grow_arr[result[0].is_growth]+" of Gram negative diplococci at 37°C"+
-	  		" for 48 hours with 5% CO<sub>2</sub></p><br/>";
+	  		"<p>Has yielded "+grow_arr[result[0].is_growth]+" of Gram negative diplococci after "+
+	  		grow_arr_hour[result[0].is_growth]+" of incubation at 37°C with 5% CO<sub>2</sub></p><br/>";
 	  		if(result[0].is_growth==1){
 	  			roughhtmlcontent+="<h2>3. VITEK-2 System</h2>"+
-		  		"<p>Neisseria gonorrhoeae "+vitek_arr[result[0].is_vitek]+" </p><br/>";
+		  		"<p>Neisseria gonorrhoeae "+vitek_arr[result[0].is_vitek]+" </p>";
 		  		if(result[0].is_vitek==1 && result[0].is_sensitivity==1){
 			  		roughhtmlcontent+="<h2>4. Sensitivity test</h2>"+
 			  		"<table width='50%''>"+
@@ -113,13 +90,17 @@ module.exports.printData = function (id,res,con,app){
 				"<br/>";
 				}
 	  		}
+
 	  		roughhtmlcontent+=
 	  			"<br/>"+
 				"<table width='100%'>"+
 				"<tr>"+
-				"<td>"+
-				"<hr/>"+
-				"<center>Consultant <br/> STI surveillance program</center>"+
+				"<td>";
+			if(result[0].head_sign==1){
+				roughhtmlcontent+="<center><img src='file:///home/erp/sti/assets/img/culture.png' alt='culture' height='80' width='80'/></center>";
+			}
+			roughhtmlcontent+="<hr/>"+
+				"<center>microbiologist <br/> STI surveillance program</center>"+
 				"<td>"+
 				"<td>"+
 	  			"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
@@ -128,9 +109,12 @@ module.exports.printData = function (id,res,con,app){
 	  			"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
 	  			"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
 				"</td>"+
-				"<td>"+
-				"<hr/>"+
-				"<center>Principal Scientific Officer <br/> Dept. of microbiology</center>"+
+				"<td>";
+			if(result[0].head_sign==1){
+				roughhtmlcontent+="<center><img src='file:///home/erp/sti/assets/img/head.png' alt='head' height='80' width='80'/></center>";
+			}
+			roughhtmlcontent+="<hr/>"+
+				"<center>Head <br/> Dept. of microbiology</center>"+
 				"</td>"+
 				"<tr/>"+
 				"</table>";

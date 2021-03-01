@@ -1,4 +1,4 @@
-module.exports.printData = function (id,res,con,app,version){
+module.exports.printData = function (id,res,con,app){
     
     var query_string="SELECT * FROM table_gp INNER JOIN pcr_result ON "+
     "table_gp.KEY_ID=pcr_result.table_gp_id WHERE table_gp.KEY_ID="+id;
@@ -13,38 +13,89 @@ module.exports.printData = function (id,res,con,app,version){
         var sti_type_arr= ['','1','2','3','4','5','6'];
         var result_arr= ['','Positive','Negative'];
         var spec = "";
-        if(result[0].visit_sm_us==1){
-        	spec+="Urethal swab";
+        if([result[0].sti_type]==1){
+            if(result[0].visit_sm_ul==1){
+            if(spec==="")
+                spec+="Ulcer swab";
+            else
+                spec+=", Ulcer swab";
+            }
+            if(result[0].visit_sm_ur==1){
+            if(spec==="")
+                spec+="Urine";
+            else
+                spec+=", Urine";
+            }
         }
-        if(result[0].visit_sm_vs==1){
-        	if(spec==="")
-        		spec+="Vaginal swab";
-        	else
-        		spec+=", Vaginal swab";
+        else if([result[0].sti_type]==2){            
+            if(result[0].visit_sm_ur==1){
+            if(spec==="")
+                spec+="Urine";
+            else
+                spec+=", Urine";
+            }
         }
-        if(result[0].visit_sm_ur==1){
-        	if(spec==="")
-        		spec+="Urine";
-        	else
-        		spec+=", Urine";
+        else if([result[0].sti_type]==3){            
+            if(result[0].visit_sm_us==1){
+                spec+="Urethal swab";
+            }
+            if(result[0].visit_sm_ur==1){
+            if(spec==="")
+                spec+="Urine";
+            else
+                spec+=", Urine";
+            }
         }
-        if(result[0].visit_sm_es==1){
-        	if(spec==="")
-        		spec+="Endocervical swab";
-        	else
-        		spec+=", Endocervical swab";
+        else if([result[0].sti_type]==4){            
+            if(result[0].visit_sm_vs==1){
+            if(spec==="")
+                spec+="Vaginal swab";
+            else
+                spec+=", Vaginal swab";
+            }
+            if(result[0].visit_sm_ur==1){
+            if(spec==="")
+                spec+="Urine";
+            else
+                spec+=", Urine";
+            }
         }
-        if(result[0].visit_sm_bd==1){
-        	if(spec==="")
-        		spec+="Blood";
-        	else
-        		spec+=", Blood";
+        else if([result[0].sti_type]==5){            
+            if(result[0].visit_sm_es==1){
+            if(spec==="")
+                spec+="Endocervical swab";
+            else
+                spec+=", Endocervical swab";
+            }
+            if(result[0].visit_sm_ur==1){
+            if(spec==="")
+                spec+="Urine";
+            else
+                spec+=", Urine";
+            }
         }
-        if(result[0].visit_sm_ul==1){
-        	if(spec==="")
-        		spec+="Ulcer swab";
-        	else
-        		spec+=", Ulcer swab";
+        else if([result[0].sti_type]==6){            
+            if(result[0].visit_sm_us==1){
+                spec+="Urethal swab";
+            }
+            if(result[0].visit_sm_vs==1){
+            if(spec==="")
+                spec+="Vaginal swab";
+            else
+                spec+=", Vaginal swab";
+            }
+            if(result[0].visit_sm_es==1){
+            if(spec==="")
+                spec+="Endocervical swab";
+            else
+                spec+=", Endocervical swab";
+            }
+            if(result[0].visit_sm_ur==1){
+            if(spec==="")
+                spec+="Urine";
+            else
+                spec+=", Urine";
+            }
         }
         var patho="";
         if(result[0].ngo==1){
@@ -170,11 +221,11 @@ module.exports.printData = function (id,res,con,app,version){
 				"<table width='100%'>"+
 				"<tr>"+
 				"<td>";
-                if(version>0){
-                    roughhtmlcontent+="<img src='file:\\\home\\project\\sti\\assets\\img\\bdgov.png' alt='bdlogo' height='80' width='80'/>";
+                if(result[0].head_sign>0){
+                    roughhtmlcontent+="<center><img src='file:///home/erp/sti/assets/img/pcr.jpg' alt='bdlogo' height='80' width='80'/></center>";
                 }
 				roughhtmlcontent+="<hr/>"+
-				"<center>Consultant <br/> STI surveillance program</center>"+
+				"<center>Microbiologist <br/> STI surveillance program</center>"+
 				"<td>"+
 				"<td>"+
 	  			"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
@@ -183,9 +234,12 @@ module.exports.printData = function (id,res,con,app,version){
 	  			"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
 	  			"&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+
 				"</td>"+
-				"<td>"+
-				"<hr/>"+
-				"<center>Principal Scientific Officer <br/> Dept. of microbiology</center>"+
+				"<td>";
+                if(result[0].head_sign>0){
+                    roughhtmlcontent+="<center><img src='file:///home/erp/sti/assets/img/head.png' alt='bdlogo' height='80' width='80'/></center>";
+                }
+				roughhtmlcontent+="<hr/>"+
+				"<center>Head <br/> Dept. of microbiology</center>"+
 				"</td>"+
 				"<tr/>"+
 				"</table>";

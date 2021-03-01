@@ -48,6 +48,20 @@
               <p>Collected Sample List</p>
             </a>
           </li>
+          <% if(role===3){%>
+          <li>
+            <a href="./cultue_sign_panel">
+              <i class="now-ui-icons education_atom"></i>
+              <p>Culture signature panel</p>
+            </a>
+          </li>
+          <li>
+            <a href="./pcr_sign_panel">
+              <i class="now-ui-icons education_atom"></i>
+              <p>PCR signature panel</p>
+            </a>
+          </li>
+          <% } %>
           <!-- <li>
             <a href="./dashboard.html">
               <i class="now-ui-icons design_app"></i>
@@ -149,7 +163,7 @@
                 </div>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#pablo">
+                <a class="nav-link" href="./logout">
                   <i class="now-ui-icons users_single-02"></i>
                   <p>
                     <span class="d-lg-none d-md-block">Account</span>
@@ -222,6 +236,11 @@
                           <a href="culture_sample?no=<%=row.KEY_ID%>">Culture report entry</a>
                           <% }else {%>
                           <a href="culture_down?no=<%=row.KEY_ID%>">Download culture report</a>
+                          <% }%>
+                          <% if(row.is_sero==0){%>
+                          <a href="sero_sample?no=<%=row.KEY_ID%>">Serological report entry</a>
+                          <% }else {%>
+                          <a href="sero_down?no=<%=row.KEY_ID%>">Download serological report</a>
                           <% }%>
                         </td>
                       </tr>

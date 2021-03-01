@@ -56,6 +56,7 @@ app.get('/',function(req,res){
 app.post('/',urlencodedParser,function(req,res){
 	checkLogin(req.body.user_id,req.body.pass,req,res);
 });
+// putsign
 app.get('/logout',function(req,res){
 	req.session.destroy();
 	res.redirect('./');
@@ -78,7 +79,7 @@ app.get('/samplelist',function(req,res){
 	}else{
 		from_date=from;
 	}
-	transaction.getData(con,from,to,res);
+	transaction.getData(con,from,to,res,req);
 });
 app.get('/culture_sample',function(req,res){
 	require('./culture_res').getData(con,req.query.no,res);
@@ -97,6 +98,16 @@ app.get('/cultue_sign_panel',function(req,res){
 		res.redirect('./dashboard');
 	}
 });
+app.post('/putsign_culture',urlencodedParser,function(req,res){
+	var id = req.body.id;
+	var sql = "UPDATE culture_result set head_sign=1, head_sign_date='"+todate+"' where id="+id;
+	con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log(result.affectedRows + " record(s) updated");
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ records: result.affectedRows }));
+  });
+});
 app.get('/pcr_sample',function(req,res){
 	require('./pcr_res').getData(con,req.query.no,res);
 });
@@ -105,11 +116,45 @@ app.post('/pcr_sample',urlencodedParser,function(req,res){
 });
 app.get('/pcr_down',function(req,res){
 	// console.log("get request!");
-	require('./pcr_report_pdf').printData(req.query.no,res,con,app,0);
+	require('./pcr_report_pdf').printData(req.query.no,res,con,app);
 	// res.end("Holla");
 });
-app.get('/pcr_down_signed',function(req,res){
-	require('./pcr_report_pdf').printData(req.query.no,res,con,app,2);
+app.get('/pcr_sign_panel',function(req,res){
+	if(checksession(req) && req.session.role==3){
+		require('./signature').getPCRList(req,res,con);
+	}else{
+		res.redirect('./dashboard');
+	}
+});
+// start of serological
+app.get('/sero_sample',function(req,res){
+	require('./sero_res').getData(con,req.query.no,res);
+});
+app.post('/sero_sample',urlencodedParser,function(req,res){
+	require('./sero_res').setData(con,req.query.no,req.body,res,promise);
+});
+app.get('/sero_down',function(req,res){
+	// console.log("get request!");
+	require('./sero_report_pdf').printData(req.query.no,res,con,app);
+	// res.end("Holla");
+});
+app.get('/sero_sign_panel',function(req,res){
+	if(checksession(req) && req.session.role==3){
+		require('./signature').getSEROList(req,res,con);
+	}else{
+		res.redirect('./dashboard');
+	}
+});
+// End of serological
+app.post('/putsign_sero',urlencodedParser,function(req,res){
+	var id = req.body.id;
+	var sql = "UPDATE sero_result set head_sign=1, head_sign_date='"+todate+"' where id="+id;
+	con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log(result.affectedRows + " record(s) updated");
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ records: result.affectedRows }));
+  });
 });
 app.get('/dashboard',function(req,res){
 	if(!checksession(req)){

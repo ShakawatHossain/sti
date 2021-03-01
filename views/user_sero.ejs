@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="/assets/img/favicon.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>
-    STI surveillance
+    Now UI Dashboard by Creative Tim
   </title>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
@@ -19,7 +19,8 @@
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="/assets/demo/demo.css" rel="stylesheet" />
 </head>
-<body class="">
+
+<body class="user-profile">
   <div class="wrapper ">
     <div class="sidebar" data-color="orange">
       <!--
@@ -35,7 +36,7 @@
       </div>
       <div class="sidebar-wrapper" id="sidebar-wrapper">
         <ul class="nav">
-          <li class="active ">
+          <li>
             <a href="./dashboard">
               <i class="now-ui-icons design_app"></i>
               <p>Dashboard</p>
@@ -47,26 +48,12 @@
               <p>Collected Sample List</p>
             </a>
           </li>
-          <% if(role===3){%>
-          <li>
-            <a href="./cultue_sign_panel">
+          <li class="active">
+            <a href="">
               <i class="now-ui-icons education_atom"></i>
-              <p>Culture signature panel</p>
+              <p>Serological report</p>
             </a>
           </li>
-          <li>
-            <a href="./pcr_sign_panel">
-              <i class="now-ui-icons education_atom"></i>
-              <p>PCR signature panel</p>
-            </a>
-          </li>
-          <li>
-            <a href="./sero_sign_panel">
-              <i class="now-ui-icons education_atom"></i>
-              <p>SERO signature panel</p>
-            </a>
-          </li>
-          <% } %>
         </ul>
       </div>
     </div>
@@ -82,7 +69,7 @@
                 <span class="navbar-toggler-bar bar3"></span>
               </button>
             </div>
-            <a class="navbar-brand"><%=rows.length%> Data displayed</a>
+            <a class="navbar-brand" href="#pablo">User Profile</a>
           </div>
           <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navigation" aria-controls="navigation-index" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-bar navbar-kebab"></span>
@@ -90,11 +77,14 @@
             <span class="navbar-toggler-bar navbar-kebab"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end" id="navigation">
-            <form action="" method="get">
+            <form>
               <div class="input-group no-border">
-                <input type="date" name="from" value="<%=from%>" class="form-control">
-                <input type="date" name="to" value="<%=to%>" class="form-control">
-                <input type="submit" name="submit" value="submit" class="btn btn-primary">
+                <input type="text" value="" class="form-control" placeholder="Search...">
+                <div class="input-group-append">
+                  <div class="input-group-text">
+                    <i class="now-ui-icons ui-1_zoom-bold"></i>
+                  </div>
+                </div>
               </div>
             </form>
             <ul class="navbar-nav">
@@ -136,33 +126,92 @@
       </div>
       <div class="content">
         <div class="row">
-          <div class="col-md-12">
+          <div class="col-md-8">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title"> Dashboard</h4>
-                <p>Hospital wise collected data distribution</p>
+                <h5 class="title">Serological result entry</h5>
               </div>
               <div class="card-body">
-                <div class="table-responsive">
-                  <table class="table">
-                    <thead class=" text-primary">
-                      <th>Hospital Name</th>
-					  <th>Department</th>
-					  <th>Sample status</th>
-					  <th>Total</th>
-                    </thead>
-                    <tbody>
-                      <% rows.forEach(row=>{ %>
-						<tr>
-						<td><%= hos[row.main_hos_code]%></td>
-						<td><% if(row.main_dept==1) {%>Gaynae-Obs <% }else {%>Skin VD<%}%></td>
-						<td><% if(row.main_sample==1) {%>Collected <% }else {%>Not Collected<%}%></td>
-						<td><%= row.total %></td>
-						<tr/>
-					  <% }) %>
-                    </tbody>
-                  </table>
+                <form action="sero_sample?no=<%=id%>" method="post">
+                  <div class="row">
+                    <div class="col-md-6 pr-1">
+                      <div class="form-group">
+                        <label>VDRL test report</label>
+                        <select name="is_reactive" id="is_reactive" class="form-control">
+                          <option value="1">Reactive</option>
+                          <option value="2">Not reactive</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="col-md-6 px-1">
+                      <div class="form-group">
+                        <label>TPHA test</label>
+                        <select name="is_tpha" id="is_tpha" class="form-control">
+                          <option value="1">Done</option>
+                          <option value="2">Not done</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <div class="col-md-12">
+                      <div class="form-group">
+                        <label>TPHA test report</label>
+                        <select name="tpha_result" id="tpha_result" class="form-control">
+                          <option value="1">Positive</option>
+                          <option value="2">Negative</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row">
+                    <input type="submit" class="btn btn-success" value="submit"/>
+                  </div>
+                  <input type="hidden" value="<%=row[0].main_case_id%>" name="case_id"/>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card card-user">
+              <div class="image">
+                <img src="/assets/img/bg5.jpg" alt="...">
+              </div>
+              <div class="card-body">
+                <div class="author">
+                  
+                    <img class="avatar border-gray" src="/assets/img/mike.jpg" alt="...">
+                    <h5 class="title"><%=row[0].demo_name%></h5>
+                  
+                  <p class="description">
+                    Age <%=row[0].demo_age%></br>
+                    Case ID<%=row[0].main_case_id%><br/>
+                    SCD <%=row[0].main_in_date%>
+                  </p>
                 </div>
+                <h5 class="title text-center">Provisional diagnosis</h5>
+                <p class="description text-center">
+                  <%= row[0].visit_pd_uds==1?"Urethral discharge syndrome":" " %>
+                  <%= row[0].visit_pd_vds==1?"Vaginal discharge syndrome":" " %>
+                  <%= row[0].visit_pd_guds==1?"Genital ulcer disease syndrome":" " %>
+                  <%= row[0].visit_pd_lap==1?"Lower abdominal pain":" " %>
+                  <%= row[0].visit_pd_ano==1?"Anorectal/Pharyngeal discharge syndrome":" " %>
+                  <%= row[0].visit_pd_oro==1?"Oropharyngeal/Anorectal ulcer disease syndrome":" " %>
+                  <%= row[0].visit_pd_sss==1?"Scrotal swelling syndrome":" " %>
+                  <%= row[0].visit_pd_ibs==1?"Inguinal bubo syndrome":" " %>
+                </p>
+              </div>
+              <hr>
+              <div class="button-container">
+              <h5 class="title">Collected sample</h5>
+                <p class="description text-center">
+                  <%= row[0].visit_sm_us==1?"Urethral swab":" " %>
+                  <%= row[0].visit_sm_vs==1?"Vaginal swab":" " %>
+                  <%= row[0].visit_sm_ur==1?"Urine":" " %>
+                  <%= row[0].visit_sm_es==1?"Endocervical swab":" " %>
+                  <%= row[0].visit_sm_bd==1?"Blood":" " %>
+                  <%= row[0].visit_sm_ul==1?"Ulcer swab":" " %>
+                </p>
               </div>
             </div>
           </div>
@@ -198,6 +247,7 @@
       </footer>
     </div>
   </div>
+  <!--   Core JS Files   -->
   <script src="/assets/js/core/jquery.min.js"></script>
   <script src="/assets/js/core/popper.min.js"></script>
   <script src="/assets/js/core/bootstrap.min.js"></script>
@@ -212,4 +262,5 @@
   <script src="/assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
   <script src="/assets/demo/demo.js"></script>
 </body>
+
 </html>
