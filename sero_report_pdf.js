@@ -7,6 +7,7 @@ module.exports.printData = function (id,res,con,app){
         var dr = new Date(result[0].mob_created_at);
         var drpt = new Date(result[0].rpt_created_at);
         var hos_name= ['','DMCH','MMCH','CMCH','RMCH','SBMCH','SOMCH','ThDH','BaDH'];
+        var dept_name= ['','Gaynae-Obs','Skin VD'];
         var pt_sex= ['','Male','Female','Transgender'];
         var vdrl_arr= ['','Reactive','Not reactive'];
         var tpha_arr= ['','Positive','Negative'];
@@ -72,7 +73,7 @@ module.exports.printData = function (id,res,con,app){
                 "<td>Date of report</td><td>"+drpt.getFullYear() + "-" + (drpt.getMonth()+1) + "-" +
                  drpt.getDate()+"</td>"+
                 "</tr><tr>"+
-                "<td>Refered by </td><td> "+hos_name[result[0].main_hos_code]+"</td>"+
+                "<td>Refered by </td><td> "+hos_name[result[0].main_hos_code]+"&amp;"+dept_name[result[0].main_dept]+"</td>"+
                 "<td>Age</td><td> "+result[0].demo_age+"</td>"+
                 "<tr/><tr>"+
                 "</tr><tr>"+
@@ -106,7 +107,7 @@ module.exports.printData = function (id,res,con,app){
                 roughhtmlcontent+="<center><img src='file:///home/erp/sti/assets/img/culture.png' alt='culture' height='80' width='80'/></center>";
             }
             roughhtmlcontent+="<hr/>"+
-                "<center>microbiologist <br/> STI surveillance program</center>"+
+                "<center>Microbiologist <br/> STI surveillance program</center>"+
                 "<td>"+
                 "<td>"+
                 "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"+

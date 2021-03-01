@@ -100,9 +100,9 @@ module.exports.printData = function (id,res,con,app){
         var patho="";
         if(result[0].ngo==1){
         	if(patho==="")
-        		patho+="N. gonorrhoea";
+        		patho+="N. gonorrhoeae";
         	else
-        		patho+=", N. gonorrhoea";
+        		patho+=", N. gonorrhoeae";
         }
         if(result[0].ctr==1){
         	if(patho==="")
@@ -204,11 +204,18 @@ module.exports.printData = function (id,res,con,app){
 	  		"<h2>Test details</h2>"+
 	  		"<p>Multi plex Real Time PCR is carried out by Bosphore STD Panel Bundle Kit v4"+
 	  		"(BIO-RAD CFX96 <sup>TM</sup> Real Time PCR Detection System) to detect STI pathogens"+
-	  		" which includes Nesseria gonorrhoea, Chlamydia trachomatis, Treponema pallidum, "+
-	  		"Mycoplasma genitalium, Mycoplasma hominis, Ureaplasma urealyticum, Ureaplasma "+
-	  		"urealyticum, Ureaplasma, Gardnerella vaginalis, Trichomonas and Herpes simplex"+
-	  		" virus type 1 (HSV-1) and type 2 (HSV-2).</p><br/><br/>"+
-	  		"<p>Result: "+result_arr[result[0].result]+" for "+patho+"</p>";
+	  		" which includes <i>Neisseria gonorrhoeae, Chlamydia trachomatis, Treponema"+
+            "pallidum, Mycoplasma genitalium, Mycoplasma hominis, Ureaplasma urealyticum,"+
+            "Ureaplasma parvum, Gardnerella vaginalis, Trichomonas vaginalis and Herpes"+
+            "simplex virus type 1 (HSV-1) and type 2 (HSV-2)</i>.</p><br/><br/>"+
+	  		"<p>Result: "+result_arr[result[0].result];
+            if(result[0].has_comment==1){
+                roughhtmlcontent+="* for <i>"+patho+"</i></p><br/><br/>";
+                roughhtmlcontent+="* Please correlate with clinical condition.";
+            }else{
+                roughhtmlcontent+=" for <i>"+patho+"</i></p>";    
+            }
+            
 
 	  		roughhtmlcontent+="<br/>"+
 				"<br/>"+

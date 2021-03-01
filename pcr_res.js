@@ -23,11 +23,11 @@ module.exports.setData = function (con,id,data,res,promise){
     hsv2 = (typeof data.hsv2=== 'undefined'?0:1);
 
     var query_string="INSERT INTO pcr_result(table_gp_id, main_case_id, sti_type,"+
-    " ngo, ctr, tpa, mge, mho, uur, upa, gva, tva, hsv1, hsv2, result) VALUES ('"+
+    " ngo, ctr, tpa, mge, mho, uur, upa, gva, tva, hsv1, hsv2, result,has_comment) VALUES ('"+
     id+"','"+data.case_id+"','"+data.sti_type+"','"+ngo+"','"+ctr+"','"+tpa
     +"','"+mge+"','"+mho+"','"+uur+"','"+upa
     +"','"+gva+"','"+tva+"','"+hsv1+"','"+hsv2
-    +"','"+data.result+"') ON DUPLICATE KEY UPDATE "+
+    +"','"+data.result+"','"+data.has_comment+"') ON DUPLICATE KEY UPDATE "+
     "main_case_id='"+data.case_id+"',"+
     "sti_type='"+data.sti_type+"',"+
     "ngo='"+ngo+"',"+

@@ -7,7 +7,7 @@
   <link rel="icon" type="image/png" href="/assets/img/favicon.png">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
   <title>
-    STI surveillance
+    Now UI Dashboard by Creative Tim
   </title>
   <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0, shrink-to-fit=no' name='viewport' />
   <!--     Fonts and icons     -->
@@ -19,6 +19,7 @@
   <!-- CSS Just for demo purpose, don't include it in your project -->
   <link href="/assets/demo/demo.css" rel="stylesheet" />
 </head>
+
 <body class="">
   <div class="wrapper ">
     <div class="sidebar" data-color="orange">
@@ -35,7 +36,7 @@
       </div>
       <div class="sidebar-wrapper" id="sidebar-wrapper">
         <ul class="nav">
-          <li class="active ">
+          <li>
             <a href="./dashboard">
               <i class="now-ui-icons design_app"></i>
               <p>Dashboard</p>
@@ -60,19 +61,61 @@
               <p>PCR signature panel</p>
             </a>
           </li>
-          <li>
-            <a href="./sero_sign_panel">
-              <i class="now-ui-icons education_atom"></i>
-              <p>SERO signature panel</p>
-            </a>
-          </li>
           <% } %>
-          <li>
+          <li class="active">
             <a href="./reports">
               <i class="now-ui-icons education_atom"></i>
               <p>Sample Report </p>
             </a>
           </li>
+          <!-- <li>
+            <a href="./dashboard.html">
+              <i class="now-ui-icons design_app"></i>
+              <p>Dashboard</p>
+            </a>
+          </li>
+          <li>
+            <a href="./icons.html">
+              <i class="now-ui-icons education_atom"></i>
+              <p>Icons</p>
+            </a>
+          </li>
+          <li>
+            <a href="./map.html">
+              <i class="now-ui-icons location_map-big"></i>
+              <p>Maps</p>
+            </a>
+          </li>
+          <li>
+            <a href="./notifications.html">
+              <i class="now-ui-icons ui-1_bell-53"></i>
+              <p>Notifications</p>
+            </a>
+          </li>
+          <li>
+            <a href="./user.html">
+              <i class="now-ui-icons users_single-02"></i>
+              <p>User Profile</p>
+            </a>
+          </li>
+          <li class="active ">
+            <a href="./tables.html">
+              <i class="now-ui-icons design_bullet-list-67"></i>
+              <p>Table List</p>
+            </a>
+          </li>
+          <li>
+            <a href="./typography.html">
+              <i class="now-ui-icons text_caps-small"></i>
+              <p>Typography</p>
+            </a>
+          </li>
+          <li class="active-pro">
+            <a href="./upgrade.html">
+              <i class="now-ui-icons arrows-1_cloud-download-93"></i>
+              <p>Upgrade to PRO</p>
+            </a>
+          </li> -->
         </ul>
       </div>
     </div>
@@ -145,27 +188,58 @@
           <div class="col-md-12">
             <div class="card">
               <div class="card-header">
-                <h4 class="card-title"> Dashboard</h4>
-                <p>Hospital wise collected data distribution</p>
+                <h4 class="card-title"> Sample List</h4>
               </div>
               <div class="card-body">
+                <div class="input-group no-border">
+                  <input id="myInput" type="text" placeholder="Search.." class="form-control">
+                  <div class="input-group-append">
+                    <div class="input-group-text">
+                      <i class="now-ui-icons ui-1_zoom-bold"></i>
+                    </div>
+                  </div>
+                </div>                      
                 <div class="table-responsive">
                   <table class="table">
                     <thead class=" text-primary">
-                      <th>Hospital Name</th>
-					  <th>Department</th>
-					  <th>Sample status</th>
-					  <th>Total</th>
+                      <th>
+                        Case ID
+                      </th>
+                      <th>
+                        Name (Age, Sex)
+                      </th>
+                      <th>
+                        PCR
+                      </th>
+                      <th>
+                        Culture
+                      </th>
+                      <th>
+                        Serological
+                      </th>
                     </thead>
-                    <tbody>
-                      <% rows.forEach(row=>{ %>
-						<tr>
-						<td><%= hos[row.main_hos_code]%></td>
-						<td><% if(row.main_dept==1) {%>Gaynae-Obs <% }else {%>Skin VD<%}%></td>
-						<td><% if(row.main_sample==1) {%>Collected <% }else {%>Not Collected<%}%></td>
-						<td><%= row.total %></td>
-						<tr/>
-					  <% }) %>
+                    <tbody id="data_table">
+                      <% rows.forEach(row=>{%>
+                      <tr>
+                        <td><%=row.main_case_id%></td>
+                        <td><%=row.demo_name%>(<%=row.demo_age%>, 
+                          <% var sex_arr=['M','F','T'];%>
+                          <%=sex_arr[row.demo_sex]%>
+                        )</td>
+                        <td>
+                          <% if(row.pcr_sign==1){%>
+                          <a href="pcr_down?no=<%=row.KEY_ID%>"><i class="now-ui-icons shopping_credit-card"></i></a>
+                        <% }%></td>
+                        <td><% if(row.cul_sign==1){%>
+                          <a href="culture_down?no=<%=row.KEY_ID%>"><i class="now-ui-icons business_badge"></i></a>
+                          <% }%></td>
+                        <td><% if(row.sero_sign==1){%>
+                          <a href="sero_down?no=<%=row.KEY_ID%>"><i class="now-ui-icons business_bank"></i></a>
+                          <% }%>
+                        </td>
+                      </tr>
+                      <%})%>
+                      
                     </tbody>
                   </table>
                 </div>
@@ -217,5 +291,17 @@
   <!-- Control Center for Now Ui Dashboard: parallax effects, scripts for the example pages etc -->
   <script src="/assets/js/now-ui-dashboard.min.js?v=1.5.0" type="text/javascript"></script><!-- Now Ui Dashboard DEMO methods, don't include it in your project! -->
   <script src="/assets/demo/demo.js"></script>
+  <script>
+    $(document).ready(function(){
+      $("#myInput").on("keyup", function() {
+        console.log($(this).val().toLowerCase());
+        var value = $(this).val().toLowerCase();
+        $("#data_table tr").filter(function() {
+          $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+        });
+      });
+    });
+</script>
 </body>
+
 </html>

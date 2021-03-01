@@ -126,6 +126,16 @@ app.get('/pcr_sign_panel',function(req,res){
 		res.redirect('./dashboard');
 	}
 });
+app.post('/putsign_pcr',urlencodedParser,function(req,res){
+	var id = req.body.id;
+	var sql = "UPDATE pcr_result set head_sign=1, head_sign_date='"+todate+"' where id="+id;
+	con.query(sql, function (err, result) {
+    if (err) throw err;
+    console.log(result.affectedRows + " record(s) updated");
+    res.setHeader('Content-Type', 'application/json');
+    res.end(JSON.stringify({ records: result.affectedRows }));
+  });
+});
 // start of serological
 app.get('/sero_sample',function(req,res){
 	require('./sero_res').getData(con,req.query.no,res);
@@ -180,6 +190,25 @@ app.get('/sti_type/:from/:to',function(req,res){
 app.get('/stis/:from/:to',function(req,res){
 	types(req.params.from,req.params.to,res);
 	// res.end("Hello from stis!");
+});
+app.get('/reports',function(req,res){
+	if(!checksession(req)){
+		res.redirect('./');
+	}
+	var transaction = require('./transaction');
+	var to = req.query.to;
+	if(typeof to === 'undefined'){
+		to = till_date;
+	}else{
+		till_date=to;
+	}
+	var from=req.query.from;
+	if(typeof from === 'undefined'){
+		from = from_date;
+	}else{
+		from_date=from;
+	}
+	transaction.getReport(con,from,to,res,req);
 });
 
 var seeDash=function(from,to,res,req){
