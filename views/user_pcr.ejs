@@ -320,7 +320,12 @@
                     <h5 class="title"><%=row[0].demo_name%></h5>
                   
                   <p class="description">
-                    Age <%=row[0].demo_age%></br>
+                    Age <%=row[0].demo_age%>
+                    Sex <% var sex_arr=['','M','F','T'];%>
+                          <%=sex_arr[row[0].demo_sex];%></br>
+                    
+                    Blister in ulcer <% var blis_arr=['No Blister','Present','Abscent'];%>
+                          <%=blis_arr[row[0].clin_blis_ulcer]%><br/>
                     Case ID<%=row[0].main_case_id%><br/>
                     SCD <%=row[0].main_in_date%>
                   </p>

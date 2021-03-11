@@ -2,6 +2,9 @@ var express = require('express');
 const session = require('express-session');
 const redis = require ('redis');
 const connectRedis = require('connect-redis');
+const nodemailer = require("nodemailer");
+// var Iconv  = require('iconv').Iconv;
+// var iconv = new Iconv('UTF-8', 'ISO-8859-1');
 var app = express();
 var mysql = require('mysql');
 var bodyParser = require('body-parser');
@@ -49,7 +52,7 @@ app.get('/',function(req,res){
 	if(!checksession(req)){
 		res.render("login");
 	}else{
-		res.render("dashboard");
+		res.redirect("./dashboard");
 	}
 	
 });
@@ -103,7 +106,7 @@ app.post('/putsign_culture',urlencodedParser,function(req,res){
 	var sql = "UPDATE culture_result set head_sign=1, head_sign_date='"+todate+"' where id="+id;
 	con.query(sql, function (err, result) {
     if (err) throw err;
-    console.log(result.affectedRows + " record(s) updated");
+    // console.log(result.affectedRows + " record(s) updated");
     res.setHeader('Content-Type', 'application/json');
     res.end(JSON.stringify({ records: result.affectedRows }));
   });
@@ -116,6 +119,7 @@ app.post('/pcr_sample',urlencodedParser,function(req,res){
 });
 app.get('/pcr_down',function(req,res){
 	// console.log("get request!");
+	// require('./pcr_report_pdf').printData(req.query.no,res,con,app,iconv);
 	require('./pcr_report_pdf').printData(req.query.no,res,con,app);
 	// res.end("Holla");
 });
@@ -209,6 +213,10 @@ app.get('/reports',function(req,res){
 		from_date=from;
 	}
 	transaction.getReport(con,from,to,res,req);
+});
+app.post('/sent_mail',urlencodedParser,function(req,res){
+	var mailer = require('./mailer');
+	mailer.sent_mail(req,res,nodemailer,con,todate);
 });
 
 var seeDash=function(from,to,res,req){
@@ -328,5 +336,4 @@ var checksession=function(req){
 		return true;
 	}
 }
-
 app.listen(3010);

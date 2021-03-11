@@ -223,15 +223,25 @@
                       <tr>
                         <td><%=row.main_case_id%></td>
                         <td><%=row.demo_name%>(<%=row.demo_age%>, 
-                          <% var sex_arr=['M','F','T'];%>
+                          <% var sex_arr=['','M','F','T'];%>
                           <%=sex_arr[row.demo_sex]%>
                         )</td>
                         <td>
                           <% if(row.pcr_sign==1){%>
                           <a href="pcr_down?no=<%=row.KEY_ID%>"><i class="now-ui-icons shopping_credit-card"></i></a>
-                        <% }%></td>
+                            <% if(row.pcr_is_circulate==1){%>
+                            <i class="now-ui-icons ui-1_check"></i>
+                            <% }else{%>
+                            <button id="sent<%=row.KEY_ID%>" onclick="pcr_send(<%=row.KEY_ID%>,2)" class="btn btn-primary">Sent</button>
+                            <% }%>
+                          <% }%></td>
                         <td><% if(row.cul_sign==1){%>
                           <a href="culture_down?no=<%=row.KEY_ID%>"><i class="now-ui-icons business_badge"></i></a>
+                            <% if(row.culture_is_circulate==1){%>
+                              <i class="now-ui-icons ui-1_check"></i>
+                            <% }else{%>
+                            <button id="sent<%=row.KEY_ID%>" onclick="pcr_send(<%=row.KEY_ID%>,1)" class="btn btn-primary">Sent</button>
+                            <% }%>
                           <% }%></td>
                         <td><% if(row.sero_sign==1){%>
                           <a href="sero_down?no=<%=row.KEY_ID%>"><i class="now-ui-icons business_bank"></i></a>
@@ -301,6 +311,25 @@
         });
       });
     });
+</script>
+<script type="text/javascript">
+  function pcr_send(id,table){
+    var data = {};
+    data['id'] = id;
+    data['table'] = table;
+    $.ajax({
+      method: "post",
+      url: "/sent_mail",
+      data: data
+    }).done(function(result){
+      if(result.records>0){
+        $('#sent'+id).hide();
+      }else{
+        console.log(result);
+        console.log(result.records);
+      }
+    });
+  }
 </script>
 </body>
 

@@ -7,13 +7,13 @@ module.exports.printData = function (id,res,con,app){
         var dr = new Date(result[0].mob_created_at);
         var drpt = new Date(result[0].rpt_created_at);
         var hos_name= ['','DMCH','MMCH','CMCH','RMCH','SBMCH','SOMCH','ThDH','BaDH'];
-        var dept_name= ['','Gaynae-Obs','Skin VD'];
+        var dept_name= ['','Gynae-Obs','Skin VD'];
         var pt_sex= ['','Male','Female','Transgender'];
-        var gram_arr= ['','Found','Not found'];
+        var gram_arr= ['','found','not found'];
         var hpf_arr= ['','Plenty','Moderate','Few','No pus cell'];
-        var grow_arr= ['','Growth','No growth'];
+        var grow_arr= ['','growth','no growth'];
         var grow_arr_hour= ['','24 hrs','48 hrs'];
-        var vitek_arr= ['','Detected','Not detected'];
+        var vitek_arr= ['','detected','not detected'];
         var sensitivity_arr= ['','Sensitive','Intermediate','Resistance'];
         var spec = "";
         if(result[0].visit_sm_us==1){
@@ -43,21 +43,21 @@ module.exports.printData = function (id,res,con,app){
 			"<hr/>"+
 			"<center><h1>Microbiological Report</h1></center>"+
 			"<br/>"+
-			"<center><table width='90%'>"+
+			"<center><table width='95%'>"+
 	  			"<tr>"+
 	  			"<td>ID no</td><td>"+result[0].main_case_id+"</td>"+
-	  			"<td>Sample collection Date</td><td>"+dr.getFullYear() + "-" + (dr.getMonth()+1) + "-" +
-	  			 dr.getDate()+"</td>"+
+	  			"<td>Sample collection Date</td><td>"+dr.getDate() + "-" + (dr.getMonth()+1) + "-" +
+	  			 dr.getFullYear()+"</td>"+
 	  			"</tr><tr>"+
 	  			"<td>Patient\'s name </td><td> "+result[0].demo_name+"</td>"+
-	  			"<td>Date of report</td><td>"+drpt.getFullYear() + "-" + (drpt.getMonth()+1) + "-" +
-	  			 drpt.getDate()+"</td>"+
+	  			"<td>Date of report</td><td>"+drpt.getDate() + "-" + (drpt.getMonth()+1) + "-" +
+	  			 drpt.getFullYear()+"</td>"+
 	  			"</tr><tr>"+
-	  			"<td>Refered by </td><td> "+hos_name[result[0].main_hos_code]+"&amp;"+dept_name[result[0].main_dept]+"</td>"+
-	  			"<td>Age</td><td> "+result[0].demo_age+"</td>"+
+	  			"<td>Refered by </td><td> "+dept_name[result[0].main_dept]+", "+hos_name[result[0].main_hos_code]+"</td>"+
+	  			"<td>Age</td><td> "+result[0].demo_age+" years</td>"+
 	  			"<tr/><tr>"+
 	  			"</tr><tr>"+
-	  			"<td>Specimen </td><td> "+spec+"</td>"+
+	  			"<td>Specimen </td><td> "+spec+" for N. gonorrhoeae</td>"+
 	  			"<td>Sex</td><td> "+pt_sex[result[0].demo_sex]+"</td>"+
 	  			"</tr>"+
 	  		"</table></center>"+
@@ -123,7 +123,8 @@ module.exports.printData = function (id,res,con,app){
 		roughhtmlcontent+="</body></html>";
         try{
         	res.pdfFromHTML({
-		        filename: 'generated.pdf',
+		        filename: "Culture_"+result[0].main_case_id+"_"+
+		        result[0].demo_name+hos_name[result[0].main_hos_code]+".pdf",
 		        htmlContent: roughhtmlcontent,
 		        options: {
 		        	format: "A3",
