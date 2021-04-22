@@ -17,7 +17,7 @@ module.exports.printData = function (id,res,con,app){
         var sensitivity_arr= ['','Sensitive','Intermediate','Resistance'];
         var spec = "";
         if(result[0].visit_sm_us==1){
-        	spec+="Urethal swab";
+        	spec+="Urethal discharge";
         }
         if(result[0].visit_sm_es==1){
         	if(spec==="")

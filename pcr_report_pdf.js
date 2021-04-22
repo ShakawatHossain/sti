@@ -33,7 +33,7 @@ module.exports.printData = function (id,res,con,app){
                 spec+=", Vaginal swab";
         }
         else if(result[0].visit_sm_us==1){
-           spec+="Urethal swab";
+           spec+="Urethral discharge";
         }
         else if(result[0].visit_sm_es==1){
             if(spec==="")

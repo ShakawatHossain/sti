@@ -9,41 +9,12 @@ module.exports.printData = function (id,res,con,app){
         var hos_name= ['','DMCH','MMCH','CMCH','RMCH','SBMCH','SOMCH','ThDH','BaDH'];
         var dept_name= ['','Gaynae-Obs','Skin VD'];
         var pt_sex= ['','Male','Female','Transgender'];
-        var vdrl_arr= ['','Reactive','Not reactive'];
+        var vdrl_arr= ['','Reactive','Non reactive'];
         var tpha_arr= ['','Positive','Negative'];
-        var spec = "";
-        if(result[0].visit_sm_us==1){
-            spec+="Urethal swab";
-        }
-        if(result[0].visit_sm_es==1){
-            if(spec==="")
-                spec+="Endocervical swab";
-            else
-                spec+=", Endocervical swab";
-        }
-        if(result[0].visit_sm_ul==1){
-            if(spec==="")
-                spec+="Ulcer swab";
-            else
-                spec+=", Ulcer swab";
-        }
-        if(result[0].visit_sm_ur==1){
-            if(spec==="")
-                spec+="Urine";
-            else
-                spec+=", Urine";
-        }
-        if(result[0].visit_sm_vs==1){
-            if(spec==="")
-                spec+="Vaginal swab";
-            else
-                spec+=", Vaginal swab";
-        }
+        var spec = "No specimen";
+        
         if(result[0].visit_sm_bd==1){
-            if(spec==="")
-                spec+="Blood";
-            else
-                spec+=", Blood";
+                spec="Blood";
         }
         var roughhtmlcontent="<html><body>"+
             "<table width='100%'>"+
@@ -61,7 +32,7 @@ module.exports.printData = function (id,res,con,app){
                 "</tr>"+
             "</table>"+
             "<hr/>"+
-            "<center><h1>serological Report</h1></center>"+
+            "<center><h1>Serological Report</h1></center>"+
             "<br/>"+
             "<center><table width='90%'>"+
                 "<tr>"+
@@ -74,7 +45,7 @@ module.exports.printData = function (id,res,con,app){
                  drpt.getDate()+"</td>"+
                 "</tr><tr>"+
                 "<td>Refered by </td><td> "+hos_name[result[0].main_hos_code]+"&amp;"+dept_name[result[0].main_dept]+"</td>"+
-                "<td>Age</td><td> "+result[0].demo_age+"</td>"+
+                "<td>Age</td><td> "+result[0].demo_age+" Year</td>"+
                 "<tr/><tr>"+
                 "</tr><tr>"+
                 "<td>Specimen </td><td> "+spec+"</td>"+

@@ -203,7 +203,7 @@
                       <th>Case ID(Name)</th>
                       <th>Action</th>
                       <th>STI type</th>
-                      <th>result</th>
+                      <th>Specimen</th>
                       <th>Pathogens</th>                    
                       <th>See Report</th>
                     </thead>
@@ -281,12 +281,24 @@
                         else
                           patho+=", Herpes simplex virus type 1 (HSV-2)";
                       }
+                      var spec="";
+                        if(row.visit_sm_ul==1)
+                            spec="Ulcer swab";
+                        else if(row.visit_sm_ur==1)
+                            spec="Urine";
+                        else if(row.visit_sm_vs==1)
+                            spec="Vaginal swab";
+                        else if(row.visit_sm_us==1)
+                            spec+="Urethral discharge";
+                        else if(row.visit_sm_es==1)
+                            spec="Endocervical swab";
                       %>
                       <tr>
                         <td><%=row.main_case_id+" ("+row.demo_name+")"%></td>
                         <td><button id="esign<%=row.id%>" onclick="putsign(<%=row.id%>)" class="btn btn-primary">e-sign</button></td>
                         <td><%=sti_type%></td>
-                        <td><%=result%></td>
+                        <!-- <td><%=result%></td> -->
+                        <td><%= spec%></td>
                         <td><%=patho%></td>                        
                         <td><a class="link" target="_blank" href="/pcr_down?no=<%=row.KEY_ID%>"><i class="now-ui-icons shopping_credit-card"></i></td>
                       </tr>
