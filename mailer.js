@@ -42,6 +42,8 @@ module.exports.sent_mail = function (req,res,nodemailer,con,todate){
         query_string="UPDATE pcr_result SET pcr_is_circulate=1,pcr_is_circulate_date='"+
         todate+"' WHERE table_gp_id="+req.body.id;
     }else if(req.body.table==3){ //sero
+        query_string="UPDATE sero_result SET sero_is_circulate=1,sero_is_circulated_date='"+
+        todate+"' WHERE table_gp_id="+req.body.id;
     }
     
     con.query(query_string, function (err, result, fields) {

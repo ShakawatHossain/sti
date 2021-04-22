@@ -100,7 +100,8 @@ module.exports.printData = function (id,res,con,app){
         roughhtmlcontent+="</body></html>";
         try{
             res.pdfFromHTML({
-                filename: 'generated.pdf',
+                filename: "Sero_"+result[0].main_case_id+"_"+result[0].demo_name+
+            hos_name[result[0].main_hos_code]+".pdf",
                 htmlContent: roughhtmlcontent,
                 options: {
                     format: "A3",

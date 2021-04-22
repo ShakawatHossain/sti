@@ -14,7 +14,8 @@ module.exports.getReport = function (con,from,to,res,req){
     var query_string="SELECT table_gp.KEY_ID,table_gp.main_case_id,table_gp.demo_name,table_gp.demo_age,"+
     "table_gp.demo_sex,culture_result.head_sign as 'cul_sign',"+
     "culture_result.culture_is_circulate as 'culture_is_circulate',pcr_result.head_sign as 'pcr_sign',"+
-    " pcr_result.pcr_is_circulate as 'pcr_is_circulate',sero_result.head_sign as 'sero_sign' "+
+    " pcr_result.pcr_is_circulate as 'pcr_is_circulate',sero_result.head_sign as 'sero_sign', "+
+    "sero_result.sero_is_circulate as 'sero_is_circulate' "+
 	"FROM table_gp "+
 	"LEFT JOIN culture_result ON culture_result.table_gp_id=table_gp.KEY_ID "+
 	"LEFT JOIN pcr_result ON pcr_result.table_gp_id=table_gp.KEY_ID "+

@@ -245,6 +245,11 @@
                           <% }%></td>
                         <td><% if(row.sero_sign==1){%>
                           <a href="sero_down?no=<%=row.KEY_ID%>"><i class="now-ui-icons business_bank"></i></a>
+                          <% if(row.sero_is_circulate==1){%>
+                              <i class="now-ui-icons ui-1_check"></i>
+                            <% }else{%>
+                            <button id="sent<%=row.KEY_ID%>" onclick="pcr_send(<%=row.KEY_ID%>,3)" class="btn btn-primary">Sent</button>
+                            <% }%>
                           <% }%>
                         </td>
                       </tr>
